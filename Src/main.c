@@ -46,18 +46,25 @@ int main(void)
 
 
   /* Enable clock for GPIO port A*/
-
+  RCC_AHBENR_REG |= (uint32_t)(1 << 17); // enable clock for A register
 	//type your code for GPIOA clock enable here:
 
-
+  //GPIOA pin 3  -- digital input
+  //GPIOA pin 4  -- digital output
   /* GPIOA pin 3 and 4 setup */
 
 	//type your code for GPIOA pins setup here:
-
+  (GPIOA_MODER_REG) &=  ~(uint32_t)(0x3 << 6); // pin 3 input mode
+  (GPIOA_MODER_REG) &=  ~(uint32_t)(0x1 << 8); // pin digital 4 output mode
+  (GPIOA_OTYPER_REG) |= (uint32_t)(0x1 << 4); // pin 4 with open drain
+  (GPIOA_OSPEEDER_REG) &= ~(uint32_t)(0x3 << 8); // pin 4 low speed
+  (GPIOA_PUPDR_REG) &= ~(uint32_t)(0x3 << 6); // pin 3 pull up reset
+  (GPIOA_PUPDR_REG) &= ~(uint32_t)(1 << 6); // pin 3 pull up set
+  (GPIOA_PUPDR_REG) &= ~(uint32_t)(0x3 << 8); // pin 4 pull up reset
 
   while (1)
   {
-	  if(BUTTON_GET_STATE)
+	  if(!BUTTON_GET_STATE)
 	  {
 		  // 0.25s delay
 		  LL_mDelay(250);
